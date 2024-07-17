@@ -1,5 +1,6 @@
+from django.contrib.auth.models import User
 from django.db.models import Sum
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 
 from charity_donation.models import Donation, Institution
@@ -32,7 +33,14 @@ class RegisterView(View):
         return render(request, 'register.html')
 
     def post(self, request):
-        username = request.POST['username']
-        password = request.POST['password']
-        password_confirm = request.POST['password_confirm']
-        email = request.POST['email']
+        name = request.POST.get('name')
+        surname = request.POST.get('surname')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        email = request.POST.get('email')
+        if password != "" and password == password2:
+            u = User(username=email, first_name=name, last_name=surname, email=email)
+            u.set_password(password)
+            u.save()
+            return redirect('login')
+        return render(request, 'register.html', {'error': 'Passwords do not match'})
