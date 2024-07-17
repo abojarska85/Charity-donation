@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import render, redirect
@@ -26,6 +27,24 @@ class AddDonation(View):
 class LoginView(View):
     def get(self, request):
         return render(request, 'login.html')
+
+    def post(self, request):
+        email = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=email, password=password)
+        if user is not None:
+            redirect_url = request.POST.get('next', 'landing')
+            login(request, user)
+            return redirect(redirect_url)
+        else:
+            return redirect('register')
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('landing')
+
 
 
 class RegisterView(View):
