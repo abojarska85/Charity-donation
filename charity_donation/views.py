@@ -29,12 +29,12 @@ class LoginView(View):
         return render(request, 'login.html')
 
     def post(self, request):
-        email = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
         user = authenticate(username=email, password=password)
         if user is not None:
-            redirect_url = request.POST.get('next', 'landing')
             login(request, user)
+            redirect_url = request.POST.get('next', 'landing')
             return redirect(redirect_url)
         else:
             return redirect('register')
