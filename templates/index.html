@@ -105,11 +105,17 @@
         <ul class="help--slides-items">
           <li>
             <div class="col">
-              <div class="title">Fundacja "Dbam o Zdrowie"</div>
-              <div class="subtitle">Cel i misja: Pomoc dzieciom z ubogich rodzin.</div>
+              <div class="title">
+                <ul>
+                  {% for i in institution %}
+                      <li>{{ i.name }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="subtitle">Cel i misja: {{institution.description}}.</div>
             </div>
 
-            <div class="col"><div class="text">ubrania, jedzenie, sprzęt AGD, meble, zabawki</div></div>
+            <div class="col"><div class="text">{{category.name}}</div></div>
           </li>
 
           <li>

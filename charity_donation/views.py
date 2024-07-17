@@ -2,7 +2,7 @@ from django.db.models import Sum
 from django.shortcuts import render
 from django.views import View
 
-from charity_donation.models import Donation
+from charity_donation.models import Donation, Institution
 
 
 class LandingPageView(View):
@@ -11,7 +11,10 @@ class LandingPageView(View):
         donation_sum = Donation.objects.aggregate(Sum('quantity'))['quantity__sum']
         institutions = donations.values('institution').distinct()
         institution_count = institutions.count()
-        return render(request, 'index.html', {'quantity': donation_sum, 'institution': institution_count})
+        institution_name = Institution.objects.all()
+
+        return render(request, 'index.html', {'quantity': donation_sum, 'institutions': institution_count,
+                                              'institution': institution_name})
 
 
 class AddDonation(View):
@@ -27,3 +30,9 @@ class LoginView(View):
 class RegisterView(View):
     def get(self, request):
         return render(request, 'register.html')
+
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+        password_confirm = request.POST['password_confirm']
+        email = request.POST['email']
