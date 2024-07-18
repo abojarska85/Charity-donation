@@ -9,16 +9,16 @@
 {#    <title>Document</title>#}
 {#    <link rel="stylesheet" href="css/style.css" />#}
 {#  </head>#}
-{% block login %}
+{% block login_header %}
   <body>
-{#    <header>#}
-{#      <nav class="container container--70">#}
-{#        <ul class="nav--actions">#}
-{#          <li><a href="#">Zaloguj</a></li>#}
-{#          <li class="highlighted"><a href="#">Załóż konto</a></li>#}
-{#        </ul>#}
-{##}
-  <ul>
+    <header>
+      <nav class="container container--70">
+        <ul class="nav--actions">
+          <li><a href="#">Zaloguj</a></li>
+          <li class="highlighted"><a href="#">Załóż konto</a></li>
+        </ul>
+
+   <ul>
           <li><a href="{% url 'landing' %}" class="btn btn--without-border active">Start</a></li>
           <li><a href="{% url 'landing'%}#steps" class="btn btn--without-border">O co chodzi?</a></li>
           <li><a href="{% url 'landing' %}#about-us" class="btn btn--without-border">O nas</a></li>
@@ -26,9 +26,10 @@
           <li><a href="{% url 'add_donation'%}#slogan__item" class="btn btn--without-border">Przekaż dary</a></li>
           <li><a href="{% url 'landing' %}#contact" class="btn btn--without-border">Kontakt</a></li>
         </ul>
-{#      </nav>#}
-{#    </header>#}
-
+      </nav>
+    </header>
+{% endblock %}    
+{% block login %}    
     <section id="login_section" class="login-page">
       <h2>Zaloguj się</h2>
       <form method="post">
