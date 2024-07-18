@@ -94,54 +94,56 @@
             <h3>Zaznacz co chcesz oddać:</h3>
 
             <div class="form-group form-group--checkbox">
+                {% for category in categories %}
               <label>
                 <input
                   type="checkbox"
                   name="categories"
-                  value="clothes-to-use"
-                />
+                  value="{{ category.name }}"/>
+                  
                 <span class="checkbox"></span>
                 <span class="description"
-                  >ubrania, które nadają się do ponownego użycia</span
+                  >{{ category.name }}</span
                 >
               </label>
+                {% endfor %}
             </div>
 
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input
-                  type="checkbox"
-                  name="categories"
-                  value="clothes-useless"
-                />
-                <span class="checkbox"></span>
-                <span class="description">ubrania, do wyrzucenia</span>
-              </label>
-            </div>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input type="checkbox" name="categories" value="toys" />
-                <span class="checkbox"></span>
-                <span class="description">zabawki</span>
-              </label>
-            </div>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input type="checkbox" name="categories" value="books" />
-                <span class="checkbox"></span>
-                <span class="description">książki</span>
-              </label>
-            </div>
-
-            <div class="form-group form-group--checkbox">
-              <label>
-                <input type="checkbox" name="categories" value="other" />
-                <span class="checkbox"></span>
-                <span class="description">inne</span>
-              </label>
-            </div>
+{#            <div class="form-group form-group--checkbox">#}
+{#              <label>#}
+{#                <input#}
+{#                  type="checkbox"#}
+{#                  name="categories"#}
+{#                  value="clothes-useless"#}
+{#                />#}
+{#                <span class="checkbox"></span>#}
+{#                <span class="description">ubrania, do wyrzucenia</span>#}
+{#              </label>#}
+{#            </div>#}
+{##}
+{#            <div class="form-group form-group--checkbox">#}
+{#              <label>#}
+{#                <input type="checkbox" name="categories" value="toys" />#}
+{#                <span class="checkbox"></span>#}
+{#                <span class="description">zabawki</span>#}
+{#              </label>#}
+{#            </div>#}
+{##}
+{#            <div class="form-group form-group--checkbox">#}
+{#              <label>#}
+{#                <input type="checkbox" name="categories" value="books" />#}
+{#                <span class="checkbox"></span>#}
+{#                <span class="description">książki</span>#}
+{#              </label>#}
+{#            </div>#}
+{##}
+{#            <div class="form-group form-group--checkbox">#}
+{#              <label>#}
+{#                <input type="checkbox" name="categories" value="other" />#}
+{#                <span class="checkbox"></span>#}
+{#                <span class="description">inne</span>#}
+{#              </label>#}
+{#            </div>#}
 
             <div class="form-group form-group--buttons">
               <button type="button" class="btn next-step">Dalej</button>
@@ -150,11 +152,11 @@
 
           <!-- STEP 2 -->
           <div data-step="2">
-            <h3>Podaj liczbę 60l worków, w które spakowałeś/aś rzeczy:</h3>
+            <h3>Podaj liczbę worków, w które spakowałeś/aś rzeczy:</h3>
 
             <div class="form-group form-group--inline">
               <label>
-                Liczba 60l worków:
+                Liczba {{ donation.quantity }} worków:
                 <input type="number" name="bags" step="1" min="1" />
               </label>
             </div>
