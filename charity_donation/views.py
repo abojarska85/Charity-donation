@@ -21,16 +21,16 @@ class LandingPageView(View):
                                               'institution': institution_name})
 
 
-class AddDonation(LoginRequiredMixin, TemplateView):
-    template_name = 'form.html'
+class AddDonation(LoginRequiredMixin, View):
     def get(self, request):
-        context = self.get_context_data()
-        return render(request, 'form.html', context)
+        c = {'categories': Category.objects.all()}
+        return render(request, 'form.html', c)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        return context
+    def post(self, request):
+        quantity = request.POST.get('quantity')
+        donation = Donation(quantity=quantity)
+        donation.save()
+        return redirect('add_donation')
 
 
 class LoginView(View):
