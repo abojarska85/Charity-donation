@@ -102,3 +102,7 @@ class RegisterView(View):
             u.save()
             return redirect('login')
         return render(request, 'register.html', {'error': 'Passwords do not match'})
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'user_view.html'

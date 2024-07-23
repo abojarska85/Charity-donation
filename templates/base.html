@@ -9,6 +9,7 @@
     <link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet" />
 </head>
 <body>
+
 {% block confirmation %}
 {% endblock %}
 
@@ -79,6 +80,12 @@
 </div>
     <div> 
     {% block register %}
+        
+    {% endblock %}
+    </div>
+
+    <div>
+    {% block user %}
         
     {% endblock %}
     </div> 
