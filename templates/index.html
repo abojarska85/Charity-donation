@@ -18,6 +18,7 @@
                 <ul class="dropdown">
                     <li><a href="#">Profil</a></li>
                     <li><a href="#">Ustawienia</a></li>
+                    <li><a href="{% url 'admin:index' %}">Panel administracyjny</a></li>  
                     <li><a href="{% url 'logout' %}">Wyloguj</a></li>
                 </ul>
             </li>     
@@ -56,7 +57,7 @@
         </div>
 
         <div class="stats--item">
-          <em>{{ institution }}</em>
+          <em>{{ institutions }}</em>
           <h3>Wspartych organizacji</h3>
           <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laboriosam magnam, sint nihil cupiditate quas quam.</p>
         </div>
