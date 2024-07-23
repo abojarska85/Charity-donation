@@ -15,10 +15,10 @@ class LandingPageView(View):
         donation_sum = Donation.objects.aggregate(Sum('quantity'))['quantity__sum']
         institutions = donations.values('institution').distinct()
         institution_count = institutions.count()
-        institution_name = Institution.objects.all()
+        # institution_name = Institution.objects.all()
 
-        return render(request, 'index.html', {'quantity': donation_sum, 'institutions': institution_count,
-                                              'institution': institution_name})
+        return render(request, 'index.html', {'quantity': donation_sum, 'institutions': institution_count})
+
 
 
 class AddDonation(LoginRequiredMixin, View):
@@ -26,6 +26,7 @@ class AddDonation(LoginRequiredMixin, View):
         categories = Category.objects.all()
         institutions = Institution.objects.all()
         return render(request, 'form.html', {'categories': categories, 'institutions': institutions})
+
 
     def post(self, request):
         quantity = request.POST.get('quantity')
