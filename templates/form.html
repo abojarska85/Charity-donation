@@ -17,6 +17,7 @@
             <ul class="dropdown">
               <li><a href="#">Profil</a></li>
               <li><a href="#">Ustawienia</a></li>
+              <li><a href="{% url 'admin:index' %}">Panel administracyjny</a></li>  
               <li><a href="{% url 'logout' %}">Wyloguj</a></li>
             </ul>
           </li>
@@ -179,7 +180,9 @@
                 <input type="radio" name="organization" value="{{institution.id}}" />
                 <span class="checkbox radio"></span>
                 <span class="description">
-                  <div class="title">{{ institution.name }}”</div>
+
+                  <div class="title">{{institution.name}}</div>
+
                   <div class="subtitle">
                     {{institution.description}}
                   </div>
