@@ -41,6 +41,7 @@ class AddDonation(LoginRequiredMixin, View):
         pick_up_date = request.POST.get('pick_up_date')
         pick_up_time = request.POST.get('pick_up_time')
         pick_up_comment = request.POST.get('pick_up_comment')
+        is_taken = request.POST.get('is_taken')
         user = request.user
         donation = Donation(quantity=quantity,
                             categories=categories,
@@ -52,7 +53,8 @@ class AddDonation(LoginRequiredMixin, View):
                             pick_up_date=pick_up_date,
                             pick_up_time=pick_up_time,
                             pick_up_comment=pick_up_comment,
-                            user=user)
+                            user=user,
+                            is_taken=is_taken)
         donation.save()
         donation.categories.set(categories)
         return redirect('form-confirmation.html')
