@@ -51,6 +51,15 @@
 <p>Name: {{ user.first_name }}</p>
 <p>Surname: {{ user.last_name }}</p>
 <p>Email: {{ user.email }}</p>
+<p>Donations:</p>
+<ul>
+    {% for donation in donations %}
+        <li>Dary dla {{ donation.institution }}</li>
+        <li> liczba worków: {{ donation.quantity }}</li>
+        <li>{{ category.name }}</li>
+        <li>zabrane {{ donation.pick_up_date }}</li>
+    {% endfor %}
+</ul>
 </body>
 {% endblock %}
 </html>
