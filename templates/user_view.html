@@ -56,8 +56,9 @@
     {% for donation in donations %}
         <li>Dary dla {{ donation.institution }}</li>
         <li> liczba worków: {{ donation.quantity }}</li>
-        <li>{{ category.name }}</li>
-        <li>zabrane {{ donation.pick_up_date }}</li>
+        <li>{{ donation.categories }}</li>
+        <li>dary odebrane {{ donation.is_taken }}</li>
+        <li>data odbioru {{ donation.pick_up_date }}</li>
     {% endfor %}
 </ul>
 </body>
