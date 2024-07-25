@@ -53,12 +53,18 @@
 <p>Email: {{ user.email }}</p>
 <p>Donations:</p>
 <ul>
-    {% for donation in donations %}
-        <li>Dary dla {{ donation.institution }}</li>
-        <li> liczba worków: {{ donation.quantity }}</li>
-        <li>{{ donation.categories }}</li>
-        <li>dary odebrane {{ donation.is_taken }}</li>
-        <li>data odbioru {{ donation.pick_up_date }}</li>
+    {% for donation, form in donations %}
+        <li class="{% if donation.is_taken %}archived{% endif %}">
+            <form method="post" action="{% url 'donation_update' pk=donation.pk%}">
+                {% csrf_token %}
+        Dary dla {{ donation.institution }} <br>
+                Liczba worków: {{ donation.quantity }}<br>
+        {{ donation.categories }}<br>
+        Dary odebrane {{ form.is_taken }}
+        Data odbioru {{ donation.pick_up_date }}
+                <input type="submit" value="update">
+            </form>
+        </li>
     {% endfor %}
 </ul>
 </body>
