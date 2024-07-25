@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import TemplateView
 
+from charity_donation.forms import DonationForm
 from charity_donation.models import Donation, Institution, Category
 
 
@@ -111,5 +112,19 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['donations'] = Donation.objects.filter(user=self.request.user)
+        context['donations'] = [(donation, DonationForm(instance=donation))
+                                for donation in Donation.objects.filter
+                                (user=self.request.user).order_by('is_taken')]
         return context
+
+
+class DonationUpdateView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        donation = Donation.objects.get(id=kwargs['pk'])
+        form = DonationForm(request.POST, instance=donation)
+        if form.is_valid():
+            updated_donation = form.save()
+            if updated_donation.is_taken:
+                updated_donation.is_archived = True
+                updated_donation.save()
+        return redirect('user_view')
