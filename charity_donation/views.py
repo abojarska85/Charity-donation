@@ -1,4 +1,6 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Sum
@@ -6,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import TemplateView
 
-from charity_donation.forms import DonationForm
+from charity_donation.forms import DonationForm, UserUpdateForm
 from charity_donation.models import Donation, Institution, Category
 
 
@@ -45,7 +47,6 @@ class AddDonation(LoginRequiredMixin, View):
         is_taken = request.POST.get('is_taken')
         user = request.user
         donation = Donation(quantity=quantity,
-                            categories=categories,
                             institution=institution,
                             address=address,
                             phone_number=phone_number,
@@ -128,3 +129,32 @@ class DonationUpdateView(LoginRequiredMixin, View):
                 updated_donation.is_archived = True
                 updated_donation.save()
         return redirect('user_view')
+
+
+class ProfileUpdateView(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user
+        profile_form = UserUpdateForm(instance=user)
+        password_form = PasswordChangeForm(user=user, use_required_attribute=False)
+        return render(request, 'user_update.html', {'profile_form': profile_form,
+                                                    'password_form': password_form})
+
+    def post(self, request):
+        user = request.user
+        profile_form = UserUpdateForm(request.POST, instance=user)
+        password_form = PasswordChangeForm(user=user, data=request.POST, use_required_attribute=False)
+
+        if password_form.is_bound and password_form.is_valid():
+            password_form.save()
+            update_session_auth_hash(request, password_form.user)
+            messages.success(request, 'Your password was successfully updated!')
+
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('user_view')
+
+        return render(request, 'user_update.html', {'profile_form': profile_form,
+                                                    'password_form': password_form})
+
+
