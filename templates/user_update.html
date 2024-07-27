@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block user_update %}
+<h2>Edytuj profil</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ profile_form.as_p }}
+    <h3>Zmień hasło</h3>
+    {{ password_form.as_p }}
+    <button type="submit">Zapisz zmiany</button>
+</form>
+{% endblock %}

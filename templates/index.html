@@ -17,7 +17,7 @@
                 Witaj {{ user.first_name }}
                 <ul class="dropdown">
                     <li><a href="{% url 'user_view' %}">Profil</a></li>
-                    <li><a href="#">Ustawienia</a></li>
+                    <li><a href="{% url 'user_update' %}">Ustawienia</a></li>
                     <li><a href="{% url 'admin:index' %}">Panel administracyjny</a></li>  
                     <li><a href="{% url 'logout' %}">Wyloguj</a></li>
                 </ul>

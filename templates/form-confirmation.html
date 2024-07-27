@@ -18,6 +18,7 @@
             Witaj {{user.first_name}}
             <ul class="dropdown">
               <li><a href="#">Profil</a></li>
+                <li><a href="{% url 'user_update' %}">Ustawienia</a></li>
               <li><a href="#">Moje zbiórki</a></li>
               <li><a href="{% url 'logout' %}">Wyloguj</a></li>
             </ul>
