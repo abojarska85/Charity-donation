@@ -13,15 +13,18 @@ class DonationForm(forms.ModelForm):
 
 class UserUpdateForm(forms.ModelForm):
     current_password = forms.CharField(widget=forms.PasswordInput,
-                                       help_text='Please enter the new password.',
+                                       help_text='Please enter current password.',
                                        required=False)
+
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
+        fields = ['username', 'first_name', 'last_name', 'email',
+                  'current_password']
 
     def clean_current_password(self):
         current_password = self.cleaned_data.get('current_password')
         if current_password and not self.instance.check_password(current_password):
             raise forms.ValidationError('Current password does not match.')
         return current_password
+
