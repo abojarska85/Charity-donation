@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import render, redirect
+from django.utils.dateparse import parse_date, parse_time
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -18,18 +19,15 @@ class LandingPageView(View):
         donation_sum = Donation.objects.aggregate(Sum('quantity'))['quantity__sum']
         institutions = donations.values('institution').distinct()
         institution_count = institutions.count()
-        # institution_name = Institution.objects.all()
-
         return render(request, 'index.html', {'quantity': donation_sum, 'institutions': institution_count})
-
 
 
 class AddDonation(LoginRequiredMixin, View):
     def get(self, request):
         categories = Category.objects.all()
         institutions = Institution.objects.all()
-        return render(request, 'form.html', {'categories': categories, 'institutions': institutions})
-
+        donation_view = Donation.objects.filter(user=request.user).order_by('-id').first()
+        return render(request, 'form.html', {'categories': categories, 'institutions': institutions, 'donation_view': donation_view})
 
     def post(self, request):
         quantity = request.POST.get('quantity')
@@ -41,12 +39,13 @@ class AddDonation(LoginRequiredMixin, View):
         phone_number = request.POST.get('phone_number')
         city = request.POST.get('city')
         zip_code = request.POST.get('zip_code')
-        pick_up_date = request.POST.get('pick_up_date')
-        pick_up_time = request.POST.get('pick_up_time')
+        pick_up_date = parse_date(request.POST.get('pick_up_date'))
+        pick_up_time = parse_time(request.POST.get('pick_up_time'))
         pick_up_comment = request.POST.get('pick_up_comment')
-        is_taken = request.POST.get('is_taken')
+        is_taken = request.POST.get('is_taken') == 'on'
         user = request.user
         donation = Donation(quantity=quantity,
+                            categories=categories,
                             institution=institution,
                             address=address,
                             phone_number=phone_number,
@@ -59,13 +58,14 @@ class AddDonation(LoginRequiredMixin, View):
                             is_taken=is_taken)
         donation.save()
         donation.categories.set(categories)
-        return redirect('form-confirmation.html')
+
+        return redirect('form_confirmation')
 
 
 class ConfirmationView(View):
     def get(self, request):
-        donation = Donation.objects.all()
-        return render(request, 'form-confirmation.html')
+        donation = Donation.objects.filter(user=request.user).order_by('-id').first()
+        return render(request, 'form-confirmation.html', {'donation': donation})
 
 
 class LoginView(View):
@@ -142,14 +142,14 @@ class ProfileUpdateView(LoginRequiredMixin, View):
     def post(self, request):
         user = request.user
         profile_form = UserUpdateForm(request.POST, instance=user)
-        password_form = PasswordChangeForm(user=user, data=request.POST, use_required_attribute=False)
+        password_form = PasswordChangeForm(user=user, data=request.POST)
 
-        if password_form.is_bound and password_form.is_valid():
-            password_form.save()
-            update_session_auth_hash(request, password_form.user)
-            messages.success(request, 'Your password was successfully updated!')
+        if profile_form.is_valid() and (not password_form.is_bound or password_form.is_valid()):
+            if password_form.is_bound and password_form.is_valid():
+                password_form.save()
+                update_session_auth_hash(request, password_form.user)
+                messages.success(request, 'Your password was successfully updated!')
 
-        if profile_form.is_valid():
             profile_form.save()
             messages.success(request, 'Your profile has been updated!')
             return redirect('user_view')
